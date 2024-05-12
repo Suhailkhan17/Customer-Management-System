@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Management System</title>
+    <style>
+      h1{
+        text-align: center;
+        border: 3px solid #601edb;
+        background-color: #f7c7f0;
+      }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td,
+      th {
+        border: 3px solid #082bf5;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #b0e3f7;
+      }
+    </style>
+  </head>
+  <body>
+   
+      
+       <h1>Customer Management System</h1>
+        <table>
+      <tr>
+        <th>Add Customer</th>
+        <th>Search</th>
+        <th>Delete</th>
+        </tr>
+        <tr>
+        <td ><label for="txtId">Id:</label>
+        <input type="number" name="" id="userId" /></td>
+        <td><label for="searchId">Search by ID: </label>
+          <input type="number" id="searchId" required></td>
+          <td><label for="deleteId">ID to Delete: </label>
+            <input type="number" id="deleteId" required></td>
+        </tr>
+      <tr>
+        <td ><label for="txtnName">Name:</label>
+        <input type="text" name="" id="name"></td>
+        <td>                                    </td>
+        <td>                                    </td>
+      </tr>
+      <tr>
+        <td><label for="txtEmail">Email</label>
+        <input type="email" name="" id="email"></td>
+       <td>                                        </td>
+          <td>                                       </td>
+            </tr>
+      <tr>
+        <td><input onclick="addCustomer_Click()" type="button" value="Add Customer" /></td>
+        <td><input onclick="searchCustomer_Click()"  type="button" value="Search Customer" /></td>
+        <td><input onclick="deleteCustomer_Click()"  type="button" value="Delete Customer" /></td>
+      </tr>
+     </table>
+    <table><tr>
+      <h1 font align="center">Customer List</h1>
+      <ul id="customerList" onclick="displayFullList()">
+         <!-- Customer details will be added dynamically here -->
+       </ul>
+      </tr>
+       </table>
+
+      <script>
+        // JavaScript code here
+        const customerList = [];
+    
+        function addCustomer_Click() {
+          const userId = document.getElementById('userId').value;
+          const name = document.getElementById('name').value;
+          const email = document.getElementById('email').value;
+    
+          if (userId === '' || name === '' || email === '') {
+            alert('Please fill in all fields.');
+            return;
+          }
+    
+          if (!Number.isInteger(Number(userId))) {
+            alert('User ID must be an integer.');
+            return;
+          }
+    
+          const existingCustomer = customerList.find(customer => customer.userId === userId);
+          if (existingCustomer) {
+            alert('User ID already exists. Please use a different ID.');
+            return;
+          }
+    
+          const customer = { userId,name, email };
+          customerList.push(customer);
+          displayCustomerList();
+          clearInputFields();
+        }
+    
+        function searchCustomer_Click() {
+          const searchId = document.getElementById('searchId').value;
+          if (searchId === '') {
+            alert('Please enter an ID to search.');
+            return;
+          }
+    
+          const customer = customerList.find(customer => customer.userId === searchId);
+          if (customer) {
+            alert(`Customer found:\nID: ${customer.userId}\nName: ${customer.name}\nEmail: ${customer.email}`);
+          } else {
+            alert('Customer not found.');
+          }
+        }
+    
+        function deleteCustomer_Click() {
+          const deleteId = document.getElementById('deleteId').value;
+          if (deleteId === '') {
+            alert('Please enter an ID to delete.');
+            return;
+          }
+    
+          const index = customerList.findIndex(customer => customer.userId === deleteId);
+          if (index !== -1) {
+            customerList.splice(index, 1);
+            displayCustomerList();
+            clearInputFields();
+            alert('Customer deleted successfully.');
+          } else {
+            alert('Customer not found.');
+          }
+        }
+          function displayCustomerList(){ 
+          const listContainer = document.getElementById('customerList');
+          listContainer.innerHTML = '';
+    
+          customerList.forEach(customer => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `ID: ${customer.userId}, Name: ${customer.name},Email: ${customer.email}`;
+            listContainer.appendChild(listItem);
+          });
+          
+        }
+   
+        function displayFullList() {
+          displayCustomerList();
+        }
+    
+        function clearInputFields() {
+          document.getElementById('userId').value = '';
+          document.getElementById('name').value = '';
+          document.getElementById('email').value = '';
+          document.getElementById('searchId').value = '';
+          document.getElementById('deleteId').value = '';
+        }
+      </script>
+    
+  </body>
+</html>
